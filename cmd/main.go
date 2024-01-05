@@ -4,10 +4,16 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mauFade/revo/infra"
 	"github.com/mauFade/revo/web"
 )
 
 const PORT = "8081"
+
+func init() {
+	infra.GetEnvironmentVariables()
+	infra.ConnectToDatabase()
+}
 
 func main() {
 	httpHanlder := web.NewHttpHandler()
