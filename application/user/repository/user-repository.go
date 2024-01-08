@@ -34,3 +34,19 @@ func (r *UserRepository) FindByEmail(email string) *usermodel.User {
 
 	return &user
 }
+
+func (r *UserRepository) FindByPhone(phone string) *usermodel.User {
+	var user usermodel.User
+
+	// sql := "SELECT * FROM users WHERE phone = ?"
+
+	// // result := r.db.Raw(sql, email).Scan(&user)
+
+	result := r.db.Where("phone = ?", phone).First(&user)
+
+	if result.RowsAffected == 0 {
+		return nil
+	}
+
+	return &user
+}
