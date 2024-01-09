@@ -22,10 +22,6 @@ func (r *UserRepository) Create(user *usermodel.User) {
 func (r *UserRepository) FindByEmail(email string) *usermodel.User {
 	var user usermodel.User
 
-	// sql := "SELECT * FROM users WHERE email = ?"
-
-	// // result := r.db.Raw(sql, email).Scan(&user)
-
 	result := r.db.Where("email = ?", email).First(&user)
 
 	if result.RowsAffected == 0 {
@@ -38,11 +34,19 @@ func (r *UserRepository) FindByEmail(email string) *usermodel.User {
 func (r *UserRepository) FindByPhone(phone string) *usermodel.User {
 	var user usermodel.User
 
-	// sql := "SELECT * FROM users WHERE phone = ?"
-
-	// // result := r.db.Raw(sql, email).Scan(&user)
-
 	result := r.db.Where("phone = ?", phone).First(&user)
+
+	if result.RowsAffected == 0 {
+		return nil
+	}
+
+	return &user
+}
+
+func (r *UserRepository) FindByUsername(username string) *usermodel.User {
+	var user usermodel.User
+
+	result := r.db.Where("username = ?", username).First(&user)
 
 	if result.RowsAffected == 0 {
 		return nil
