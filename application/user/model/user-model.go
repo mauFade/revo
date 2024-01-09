@@ -10,7 +10,7 @@ type User struct {
 	Password  string
 	Username  string
 	Bio       string
-	Avatar    string
+	Avatar    *string
 	City      string
 	Country   string
 	Deleted   bool
@@ -27,7 +27,7 @@ func NewUser(
 	password string,
 	username string,
 	bio string,
-	avatar string,
+	avatar *string,
 	city string,
 	country string,
 	deleted bool,

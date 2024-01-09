@@ -21,12 +21,34 @@ type CreateUserInput struct {
 	Country  string
 }
 
-type CreateUserService struct {
-	Repository *userrepository.UserRepository
+type CreateUserOutput struct {
+	Id        string     `json:"id"`
+	Name      string     `json:"iame"`
+	Email     string     `json:"email"`
+	Phone     string     `json:"phone"`
+	Username  string     `json:"username"`
+	Bio       string     `json:"bio"`
+	Avatar    *string    `json:"avatar"`
+	City      string     `json:"city"`
+	Country   string     `json:"country"`
+	Deleted   bool       `json:"deleted"`
+	DeletedAt *time.Time `json:"deleted_at"`
+	UpdatedAt time.Time  `json:"updated_at"`
+	CreatedAt time.Time  `json:"created_at"`
 }
 
-func (s *CreateUserService) Execute(data *CreateUserInput) (*usermodel.User, error) {
-	emailExists := s.Repository.FindByEmail(data.Email)
+type CreateUserService struct {
+	repository *userrepository.UserRepository
+}
+
+func NewCreateUserService(r *userrepository.UserRepository) *CreateUserService {
+	return &CreateUserService{
+		repository: r,
+	}
+}
+
+func (s *CreateUserService) Execute(data CreateUserInput) (*CreateUserOutput, error) {
+	emailExists := s.repository.FindByEmail(data.Email)
 
 	if emailExists != nil {
 		return nil, errors.New("This email is already in use.")
@@ -46,7 +68,7 @@ func (s *CreateUserService) Execute(data *CreateUserInput) (*usermodel.User, err
 		string(hash),
 		data.Username,
 		data.Bio,
-		"",
+		nil,
 		data.City,
 		data.Country,
 		false,
@@ -55,6 +77,21 @@ func (s *CreateUserService) Execute(data *CreateUserInput) (*usermodel.User, err
 		time.Now(),
 	)
 
-	s.Repository.Create(user)
+	s.repository.Create(user)
 
+	return &CreateUserOutput{
+		Id:        user.Id,
+		Name:      user.Name,
+		Email:     user.Email,
+		Phone:     user.Phone,
+		Username:  user.Username,
+		Bio:       user.Bio,
+		Avatar:    user.Avatar,
+		City:      user.City,
+		Country:   user.Country,
+		Deleted:   user.Deleted,
+		DeletedAt: user.DeletedAt,
+		UpdatedAt: user.UpdatedAt,
+		CreatedAt: user.CreatedAt,
+	}, nil
 }
