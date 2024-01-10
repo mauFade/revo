@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	postmodel "github.com/mauFade/revo/application/post/model"
 	usermodel "github.com/mauFade/revo/application/user/model"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -32,5 +33,6 @@ func ConnectToDatabase() {
 
 	DB.AutoMigrate(
 		usermodel.User{},
+		postmodel.Post{},
 	)
 }

@@ -22,7 +22,7 @@ type CreateUserInput struct {
 }
 
 type CreateUserOutput struct {
-	Id        uuid.UUID  `json:"id"`
+	Id        string     `json:"id"`
 	Name      string     `json:"iame"`
 	Email     string     `json:"email"`
 	Phone     string     `json:"phone"`
@@ -61,7 +61,7 @@ func (s *CreateUserService) Execute(data CreateUserInput) (*CreateUserOutput, er
 	}
 
 	user := usermodel.NewUser(
-		uuid.New(),
+		uuid.NewString(),
 		data.Name,
 		data.Email,
 		data.Phone,

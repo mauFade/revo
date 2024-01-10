@@ -1,4 +1,4 @@
-package web
+package infra
 
 import (
 	"errors"

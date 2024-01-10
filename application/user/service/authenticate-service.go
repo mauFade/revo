@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 	userrepository "github.com/mauFade/revo/application/user/repository"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -20,11 +19,11 @@ type AuthenticateInput struct {
 }
 
 type AuthenticateOutput struct {
-	Id       uuid.UUID `json:"id"`
-	Name     string    `json:"name"`
-	Email    string    `json:"email"`
-	Username string    `json:"username"`
-	Token    string    `json:"token"`
+	Id       string `json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Username string `json:"username"`
+	Token    string `json:"token"`
 }
 
 func NewAuthenticateUserService(repository *userrepository.UserRepository) *AuthenticateUserService {
@@ -79,7 +78,7 @@ func (s *AuthenticateUserService) validateInput(data AuthenticateInput) error {
 	return nil
 }
 
-func (s *AuthenticateUserService) generateToken(userId uuid.UUID) (string, error) {
+func (s *AuthenticateUserService) generateToken(userId string) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
