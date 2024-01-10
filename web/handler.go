@@ -11,6 +11,8 @@ func NewHttpHandler() *gin.Engine {
 
 	users := v1.Group("/users")
 
+	v1.POST("/login", usercontroller.AuthenticateUserController)
+
 	users.POST("/", usercontroller.CreateUserController)
 
 	return router
