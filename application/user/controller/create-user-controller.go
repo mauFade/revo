@@ -48,7 +48,5 @@ func CreateUserController(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{
-		"data": user,
-	})
+	c.JSON(http.StatusCreated, user)
 }
