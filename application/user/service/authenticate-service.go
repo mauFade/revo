@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	userrepository "github.com/mauFade/revo/application/user/repository"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -19,11 +20,11 @@ type AuthenticateInput struct {
 }
 
 type AuthenticateOutput struct {
-	Id       string `json:"id"`
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Username string `json:"username"`
-	Token    string `json:"token"`
+	Id       uuid.UUID `json:"id"`
+	Name     string    `json:"name"`
+	Email    string    `json:"email"`
+	Username string    `json:"username"`
+	Token    string    `json:"token"`
 }
 
 func NewAuthenticateUserService(repository *userrepository.UserRepository) *AuthenticateUserService {
@@ -51,14 +52,14 @@ func (s *AuthenticateUserService) Execute(data AuthenticateInput) (*Authenticate
 		return nil, errors.New("Invalid password")
 	}
 
-	token, err := s.generateToken(user.Id)
+	token, err := s.generateToken(user.ID)
 
 	if err != nil {
 		return nil, err
 	}
 
 	return &AuthenticateOutput{
-		Id:       user.Id,
+		Id:       user.ID,
 		Name:     user.Name,
 		Email:    user.Email,
 		Username: user.Username,
@@ -78,7 +79,7 @@ func (s *AuthenticateUserService) validateInput(data AuthenticateInput) error {
 	return nil
 }
 
-func (s *AuthenticateUserService) generateToken(userId string) (string, error) {
+func (s *AuthenticateUserService) generateToken(userId uuid.UUID) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)

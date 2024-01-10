@@ -1,26 +1,30 @@
 package usermodel
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type User struct {
-	Id        string
-	Name      string
-	Email     string
-	Phone     string
-	Password  string
-	Username  string
-	Bio       string
-	Avatar    *string
-	City      string
-	Country   string
-	Deleted   bool
-	DeletedAt *time.Time
-	UpdatedAt time.Time
-	CreatedAt time.Time
+	ID        uuid.UUID  `gorm:"type:uuid"`
+	Name      string     `gorm:"type:varchar"`
+	Email     string     `gorm:"type:varchar"`
+	Phone     string     `gorm:"type:varchar"`
+	Password  string     `gorm:"type:varchar"`
+	Username  string     `gorm:"type:varchar"`
+	Bio       string     `gorm:"type:varchar"`
+	Avatar    *string    `gorm:"type:varchar"`
+	City      string     `gorm:"type:varchar"`
+	Country   string     `gorm:"type:varchar"`
+	Deleted   bool       `gorm:"type:bool"`
+	DeletedAt *time.Time `gorm:"type:timestamp"`
+	UpdatedAt time.Time  `gorm:"type:timestamp"`
+	CreatedAt time.Time  `gorm:"type:timestamp"`
 }
 
 func NewUser(
-	id string,
+	id uuid.UUID,
 	name string,
 	email string,
 	phone string,
@@ -36,7 +40,7 @@ func NewUser(
 	created_at time.Time,
 ) *User {
 	return &User{
-		Id:        id,
+		ID:        id,
 		Name:      name,
 		Email:     email,
 		Phone:     phone,
