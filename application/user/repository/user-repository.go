@@ -54,3 +54,15 @@ func (r *UserRepository) FindByUsername(username string) *usermodel.User {
 
 	return &user
 }
+
+func (r *UserRepository) FindByIdMacro(ids []string) []*usermodel.User {
+	var users []*usermodel.User
+
+	result := r.db.Where("id IN ?", ids).Find(&users)
+
+	if result.RowsAffected == 0 {
+		return []*usermodel.User{}
+	}
+
+	return users
+}
