@@ -21,6 +21,7 @@ func NewHttpHandler() *gin.Engine {
 
 	{
 		posts.POST("/", postcontroller.CreatePostController)
+		posts.GET("/", postcontroller.ListUserPostController)
 	}
 
 	return router
