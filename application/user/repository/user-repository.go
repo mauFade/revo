@@ -19,6 +19,22 @@ func (r *UserRepository) Create(user *usermodel.User) {
 	r.db.Create(user)
 }
 
+func (r *UserRepository) Update(user *usermodel.User) {
+	r.db.Save(&user)
+}
+
+func (r *UserRepository) FindById(id string) *usermodel.User {
+	var user usermodel.User
+
+	result := r.db.Where("id = ?", id).First(&user)
+
+	if result.RowsAffected == 0 {
+		return nil
+	}
+
+	return &user
+}
+
 func (r *UserRepository) FindByEmail(email string) *usermodel.User {
 	var user usermodel.User
 
