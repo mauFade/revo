@@ -11,6 +11,7 @@ type User struct {
 	Name      string           `gorm:"type:varchar"`
 	Email     string           `gorm:"type:varchar"`
 	Phone     string           `gorm:"type:varchar"`
+	Followers int64            `gorm:"type:int8"`
 	Password  string           `gorm:"type:varchar"`
 	Username  string           `gorm:"type:varchar"`
 	Bio       string           `gorm:"type:varchar"`
@@ -36,6 +37,7 @@ func NewUser(
 	city string,
 	country string,
 	deleted bool,
+	followers int64,
 	deleted_at *time.Time,
 	updated_at time.Time,
 	created_at time.Time,
@@ -51,6 +53,7 @@ func NewUser(
 		Avatar:    avatar,
 		City:      city,
 		Country:   country,
+		Followers: followers,
 		Deleted:   deleted,
 		DeletedAt: deleted_at,
 		UpdatedAt: updated_at,

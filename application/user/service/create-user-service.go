@@ -32,6 +32,7 @@ type CreateUserOutput struct {
 	City      string     `json:"city"`
 	Country   string     `json:"country"`
 	Deleted   bool       `json:"deleted"`
+	Followers int64      `json:"followers"`
 	DeletedAt *time.Time `json:"deleted_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
 	CreatedAt time.Time  `json:"created_at"`
@@ -72,6 +73,7 @@ func (s *CreateUserService) Execute(data CreateUserInput) (*CreateUserOutput, er
 		data.City,
 		data.Country,
 		false,
+		0,
 		nil,
 		time.Now(),
 		time.Now(),
@@ -91,6 +93,7 @@ func (s *CreateUserService) Execute(data CreateUserInput) (*CreateUserOutput, er
 		Country:   user.Country,
 		Deleted:   user.Deleted,
 		DeletedAt: user.DeletedAt,
+		Followers: user.Followers,
 		UpdatedAt: user.UpdatedAt,
 		CreatedAt: user.CreatedAt,
 	}, nil
