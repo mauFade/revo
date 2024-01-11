@@ -17,6 +17,9 @@ func NewHttpHandler() *gin.Engine {
 
 	{
 		users.POST("/", usercontroller.CreateUserController)
+
+		users.Use(EnsureAuthenticatedMiddleware())
+		users.GET("/followers", usercontroller.ListUserFollowersController)
 	}
 
 	{
