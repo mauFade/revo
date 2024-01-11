@@ -22,7 +22,7 @@ func (r *UserRepository) Create(user *usermodel.User) {
 func (r *UserRepository) FindByEmail(email string) *usermodel.User {
 	var user usermodel.User
 
-	result := r.db.Where("email = ?", email).First(&user)
+	result := r.db.Where("LOWER(email) = ?", email).First(&user)
 
 	if result.RowsAffected == 0 {
 		return nil
@@ -46,7 +46,7 @@ func (r *UserRepository) FindByPhone(phone string) *usermodel.User {
 func (r *UserRepository) FindByUsername(username string) *usermodel.User {
 	var user usermodel.User
 
-	result := r.db.Where("username = ?", username).First(&user)
+	result := r.db.Where("LOWER(username) = ?", username).First(&user)
 
 	if result.RowsAffected == 0 {
 		return nil

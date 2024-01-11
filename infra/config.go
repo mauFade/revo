@@ -33,6 +33,7 @@ func ConnectToDatabase() {
 
 	DB.AutoMigrate(
 		usermodel.User{},
+		usermodel.FollowerFollowed{},
 		postmodel.Post{},
 	)
 }
