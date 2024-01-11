@@ -125,18 +125,22 @@ func (s *FollowUnfollowService) follow(data followInput) error {
 		return errors.New("Followed user not found with this id.")
 	}
 
-	followedUser.Followers += 1
+	follow := s.fr.FindByFollower(followedUser.ID, data.UserId)
 
-	newFollow := usermodel.NewFollowerFollowed(
-		uuid.NewString(),
-		followedUser.ID,
-		data.UserId,
-		time.Now(),
-	)
+	if follow == nil {
+		followedUser.Followers += 1
 
-	s.fr.Create(newFollow)
+		newFollow := usermodel.NewFollowerFollowed(
+			uuid.NewString(),
+			followedUser.ID,
+			data.UserId,
+			time.Now(),
+		)
 
-	s.ur.Update(followedUser)
+		s.fr.Create(newFollow)
+
+		s.ur.Update(followedUser)
+	}
 
 	return nil
 }
