@@ -18,14 +18,16 @@ func NewHttpHandler() *gin.Engine {
 	{
 		users.POST("/", usercontroller.CreateUserController)
 
-		users.Use(EnsureAuthenticatedMiddleware())
 		users.GET("/followers", usercontroller.ListUserFollowersController)
 		users.POST("/followers", usercontroller.FollowUnfollowController)
 	}
 
+	v1.Use(EnsureAuthenticatedMiddleware())
+
 	{
 		posts.POST("/", postcontroller.CreatePostController)
-		posts.GET("/", postcontroller.ListUserPostController)
+		posts.GET("/profile", postcontroller.ListUserPostController)
+		posts.GET("/", postcontroller.ListFollowingPostsController)
 	}
 
 	return router

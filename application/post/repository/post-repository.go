@@ -31,6 +31,18 @@ func (r *PostRepository) FindByID(id string) *postmodel.Post {
 	return &post
 }
 
+func (r *PostRepository) FindByUserIDMacro(userIds []string) []*postmodel.Post {
+	var posts []*postmodel.Post
+
+	result := r.db.Where("user_id IN ?", userIds).Find(&posts)
+
+	if result.RowsAffected == 0 {
+		return []*postmodel.Post{}
+	}
+
+	return posts
+}
+
 func (r *PostRepository) FindUserPosts(userId string) []*postmodel.Post {
 	var posts []*postmodel.Post
 
