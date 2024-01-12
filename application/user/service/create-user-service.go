@@ -23,7 +23,7 @@ type CreateUserInput struct {
 
 type CreateUserOutput struct {
 	Id        string     `json:"id"`
-	Name      string     `json:"iame"`
+	Name      string     `json:"name"`
 	Email     string     `json:"email"`
 	Phone     string     `json:"phone"`
 	Username  string     `json:"username"`

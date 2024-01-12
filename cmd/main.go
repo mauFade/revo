@@ -16,11 +16,11 @@ func init() {
 }
 
 func main() {
-	httpHanlder := web.NewHttpHandler()
+	httpHandler := web.NewHttpHandler()
 
 	server := &http.Server{
 		Addr:    ":" + PORT,
-		Handler: httpHanlder,
+		Handler: httpHandler,
 	}
 
 	fmt.Println("\nREST API running at port: ", PORT)

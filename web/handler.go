@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	postcontroller "github.com/mauFade/revo/application/post/controller"
 	usercontroller "github.com/mauFade/revo/application/user/controller"
@@ -8,27 +9,27 @@ import (
 
 func NewHttpHandler() *gin.Engine {
 	router := gin.Default()
-	v1 := router.Group("/v1")
 
-	users := v1.Group("/users")
-	posts := v1.Group("/posts")
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
-	v1.POST("/login", usercontroller.AuthenticateUserController)
+	router.POST("/v1/login", usercontroller.AuthenticateUserController)
 
-	{
-		users.POST("/", usercontroller.CreateUserController)
+	router.POST("/v1/users", usercontroller.CreateUserController)
 
-		users.GET("/followers", usercontroller.ListUserFollowersController)
-		users.POST("/followers", usercontroller.FollowUnfollowController)
-	}
+	router.Use(EnsureAuthenticatedMiddleware())
 
-	v1.Use(EnsureAuthenticatedMiddleware())
+	router.GET("/v1/users/followers", usercontroller.ListUserFollowersController)
+	router.POST("/v1/users/followers", usercontroller.FollowUnfollowController)
 
-	{
-		posts.POST("/", postcontroller.CreatePostController)
-		posts.GET("/profile", postcontroller.ListUserPostController)
-		posts.GET("/", postcontroller.ListFollowingPostsController)
-	}
+	router.POST("/v1/posts", postcontroller.CreatePostController)
+	router.GET("/v1/posts/profile", postcontroller.ListUserPostController)
+	router.GET("/v1/posts", postcontroller.ListFollowingPostsController)
 
 	return router
 }
