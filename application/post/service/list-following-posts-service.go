@@ -59,6 +59,7 @@ func NewListFollowingPostsService(
 
 func (s *ListFollowingPostsService) Execute(data ListFollowingPostsInput) []*listFollowingPostsOutput {
 	userFollowing := s.fr.GetUserFollowing(data.UserId)
+
 	var gollowingIDs []string
 	var postIDs []string
 	var output []*listFollowingPostsOutput
@@ -79,7 +80,7 @@ func (s *ListFollowingPostsService) Execute(data ListFollowingPostsInput) []*lis
 		likedByMe := false
 
 		for _, like := range likes {
-			if like.PostID == post.ID && like.UserID == post.UserID {
+			if like.PostID == post.ID && like.UserID == data.UserId {
 				likedByMe = true
 			}
 		}
