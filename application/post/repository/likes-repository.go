@@ -6,19 +6,35 @@ import (
 )
 
 type LikeRepository struct {
-	DB *gorm.DB
+	db *gorm.DB
 }
 
 func NewLikeRepository(db *gorm.DB) *LikeRepository {
 	return &LikeRepository{
-		DB: db,
+		db: db,
 	}
 }
 
 func (r *LikeRepository) Insert(entity *postmodel.Like) {
-	r.DB.Create(entity)
+	r.db.Create(entity)
 }
 
 func (r *LikeRepository) Update(entity *postmodel.Like) {
-	r.DB.Save(entity)
+	r.db.Save(entity)
+}
+
+func (r *LikeRepository) FindByUserIDAndPostID(postId, userId string) *postmodel.Like {
+	var like *postmodel.Like
+
+	result := r.db.
+		Table("likes").
+		Select("likes.*").
+		Where("user_id = ? AND post_id = ?", userId, postId).
+		Find(&like)
+
+	if result.RowsAffected == 0 {
+		return nil
+	}
+
+	return like
 }
