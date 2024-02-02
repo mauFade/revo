@@ -1,6 +1,7 @@
 package postrepository
 
 import (
+	postdto "github.com/mauFade/revo/application/post/dto"
 	postmodel "github.com/mauFade/revo/application/post/model"
 	"gorm.io/gorm"
 )
@@ -31,25 +32,35 @@ func (r *PostRepository) FindByID(id string) *postmodel.Post {
 	return &post
 }
 
-func (r *PostRepository) FindByUserIDMacro(userIds []string) []*postmodel.Post {
-	var posts []*postmodel.Post
+func (r *PostRepository) FindByUserIDMacro(userIds []string) []*postdto.FindByUserIDMacroDTO {
+	var posts []*postdto.FindByUserIDMacroDTO
 
-	result := r.db.Where("user_id IN ?", userIds).Find(&posts)
+	result := r.db.
+		Table("posts").
+		Select("posts.*, users.id AS user_id, users.name, users.email, users.username").
+		Joins("JOIN users ON posts.user_id = users.id").
+		Where("posts.user_id IN (?)", userIds).
+		Find(&posts)
 
 	if result.RowsAffected == 0 {
-		return []*postmodel.Post{}
+		return []*postdto.FindByUserIDMacroDTO{}
 	}
 
 	return posts
 }
 
-func (r *PostRepository) FindUserPosts(userId string) []*postmodel.Post {
-	var posts []*postmodel.Post
+func (r *PostRepository) FindUserPosts(userId string) []*postdto.FindByUserIDMacroDTO {
+	var posts []*postdto.FindByUserIDMacroDTO
 
-	result := r.db.Where("user_id = ?", userId).Find(&posts)
+	result := r.db.
+		Table("posts").
+		Select("posts.*, users.id AS user_id, users.name, users.email, users.username").
+		Joins("JOIN users ON posts.user_id = users.id").
+		Where("posts.user_id = ?", userId).
+		Find(&posts)
 
 	if result.RowsAffected == 0 {
-		return []*postmodel.Post{}
+		return []*postdto.FindByUserIDMacroDTO{}
 	}
 
 	return posts

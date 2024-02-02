@@ -4,7 +4,7 @@ import (
 	"sort"
 	"time"
 
-	postmodel "github.com/mauFade/revo/application/post/model"
+	postdto "github.com/mauFade/revo/application/post/dto"
 	postrepository "github.com/mauFade/revo/application/post/repository"
 	userrepository "github.com/mauFade/revo/application/user/repository"
 )
@@ -13,18 +13,25 @@ type ListFollowingPostsInput struct {
 	UserId string
 }
 
+type userPostOutput struct {
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Username string `json:"username"`
+}
+
 type listFollowingPostsOutput struct {
-	ID        string     `json:"id"`
-	UserID    string     `json:"user_id"`
-	Title     string     `json:"title"`
-	Body      string     `json:"body"`
-	Likes     int64      `json:"likes"`
-	Shares    int64      `json:"shares"`
-	Comments  int64      `json:"comments"`
-	Deleted   bool       `json:"deleted"`
-	DeletedAt *time.Time `json:"deleted_at"`
-	UpdatedAt time.Time  `json:"updated_at"`
-	CreatedAt time.Time  `json:"created_at"`
+	ID        string          `json:"id"`
+	User      *userPostOutput `json:"user"`
+	Title     string          `json:"title"`
+	Body      string          `json:"body"`
+	Likes     int64           `json:"likes"`
+	Shares    int64           `json:"shares"`
+	Comments  int64           `json:"comments"`
+	Deleted   bool            `json:"deleted"`
+	DeletedAt *time.Time      `json:"deleted_at"`
+	UpdatedAt time.Time       `json:"updated_at"`
+	CreatedAt time.Time       `json:"created_at"`
 }
 
 type ListFollowingPostsService struct {
@@ -58,8 +65,13 @@ func (s *ListFollowingPostsService) Execute(data ListFollowingPostsInput) []*lis
 
 	for _, post := range posts {
 		output = append(output, &listFollowingPostsOutput{
-			ID:        post.ID,
-			UserID:    post.UserID,
+			ID: post.ID,
+			User: &userPostOutput{
+				ID:       post.UserID,
+				Name:     post.Name,
+				Email:    post.Email,
+				Username: post.Username,
+			},
 			Title:     post.Title,
 			Body:      post.Body,
 			Likes:     post.Likes,
@@ -75,8 +87,9 @@ func (s *ListFollowingPostsService) Execute(data ListFollowingPostsInput) []*lis
 	return output
 }
 
-func (s *ListFollowingPostsService) getCombinedPostsSorted(followerIDs []string, userID string) []*postmodel.Post {
+func (s *ListFollowingPostsService) getCombinedPostsSorted(followerIDs []string, userID string) []*postdto.FindByUserIDMacroDTO {
 	followingPosts := s.pr.FindByUserIDMacro(followerIDs)
+
 	userPosts := s.pr.FindUserPosts(userID)
 
 	combinedPosts := append(followingPosts, userPosts...)

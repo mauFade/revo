@@ -9,7 +9,9 @@ import (
 
 func EnsureAuthenticatedMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		tokenString := ctx.GetHeader("Authorization")[7:]
+		authorization := ctx.GetHeader("Authorization")
+
+		tokenString := authorization[7:]
 
 		if tokenString == "" {
 			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Missing authentication token"})
