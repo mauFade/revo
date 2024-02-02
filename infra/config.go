@@ -35,5 +35,6 @@ func ConnectToDatabase() {
 		usermodel.User{},
 		usermodel.FollowerFollowed{},
 		postmodel.Post{},
+		postmodel.Like{},
 	)
 }

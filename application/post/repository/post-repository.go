@@ -20,6 +20,10 @@ func (r *PostRepository) Create(post *postmodel.Post) {
 	r.db.Create(post)
 }
 
+func (r *PostRepository) Update(post *postmodel.Post) {
+	r.db.Save(post)
+}
+
 func (r *PostRepository) FindByID(id string) *postmodel.Post {
 	var post postmodel.Post
 

@@ -30,6 +30,7 @@ func NewHttpHandler() *gin.Engine {
 	router.POST("/v1/posts", postcontroller.CreatePostController)
 	router.GET("/v1/posts/profile", postcontroller.ListUserPostController)
 	router.GET("/v1/posts", postcontroller.ListFollowingPostsController)
+	router.POST("/v1/posts/like", postcontroller.LikePostController)
 
 	return router
 }
