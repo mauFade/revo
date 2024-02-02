@@ -26,11 +26,13 @@ func ListFollowingPostsController(c *gin.Context) {
 	ur := userrepository.NewUserRepository(infra.DB)
 	fr := userrepository.NewFollowerRepository(infra.DB)
 	pr := postrepository.NewPostRepository(infra.DB)
+	lr := postrepository.NewLikeRepository(infra.DB)
 
 	s := postservice.NewListFollowingPostsService(
 		pr,
 		ur,
 		fr,
+		lr,
 	)
 
 	data := s.Execute(postservice.ListFollowingPostsInput{

@@ -38,3 +38,19 @@ func (r *LikeRepository) FindByUserIDAndPostID(postId, userId string) *postmodel
 
 	return like
 }
+
+func (r *LikeRepository) FindByPostIDMacro(postIDs []string) []*postmodel.Like {
+	var likes []*postmodel.Like
+
+	result := r.db.
+		Table("likes").
+		Select("likes.*").
+		Where("post_id IN (?)", postIDs).
+		Find(&likes)
+
+	if result.RowsAffected == 0 {
+		return []*postmodel.Like{}
+	}
+
+	return likes
+}

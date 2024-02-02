@@ -41,7 +41,7 @@ func (r *PostRepository) FindByUserIDMacro(userIds []string) []*postdto.FindByUs
 
 	result := r.db.
 		Table("posts").
-		Select("posts.*, users.id AS user_id, users.name, users.email, users.username").
+		Select("posts.*, users.id AS user_id, users.name, users.email, users.username, users.avatar").
 		Joins("JOIN users ON posts.user_id = users.id").
 		Where("posts.user_id IN (?)", userIds).
 		Find(&posts)
@@ -58,7 +58,7 @@ func (r *PostRepository) FindUserPosts(userId string) []*postdto.FindByUserIDMac
 
 	result := r.db.
 		Table("posts").
-		Select("posts.*, users.id AS user_id, users.name, users.email, users.username").
+		Select("posts.*, users.id AS user_id, users.name, users.email, users.username, users.avatar").
 		Joins("JOIN users ON posts.user_id = users.id").
 		Where("posts.user_id = ?", userId).
 		Find(&posts)

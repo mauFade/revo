@@ -17,4 +17,5 @@ type FindByUserIDMacroDTO struct {
 	Name      string
 	Email     string
 	Username  string
+	Avatar    *string
 }
