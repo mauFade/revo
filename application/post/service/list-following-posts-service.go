@@ -60,15 +60,15 @@ func NewListFollowingPostsService(
 func (s *ListFollowingPostsService) Execute(data ListFollowingPostsInput) []*listFollowingPostsOutput {
 	userFollowing := s.fr.GetUserFollowing(data.UserId)
 
-	var gollowingIDs []string
+	var followingIDs []string
 	var postIDs []string
 	var output []*listFollowingPostsOutput
 
 	for _, follower := range userFollowing {
-		gollowingIDs = append(gollowingIDs, follower.FollowedUserId)
+		followingIDs = append(followingIDs, follower.FollowedUserId)
 	}
 
-	posts := s.getCombinedPostsSorted(gollowingIDs, data.UserId)
+	posts := s.getCombinedPostsSorted(followingIDs, data.UserId)
 
 	for _, post := range posts {
 		postIDs = append(postIDs, post.ID)
@@ -116,10 +116,6 @@ func (s *ListFollowingPostsService) getCombinedPostsSorted(followerIDs []string,
 	userPosts := s.pr.FindUserPosts(userID)
 
 	combinedPosts := append(followingPosts, userPosts...)
-
-	// for _, post := range combinedPosts {
-	// 	fmt.Println(post.Likeuserid, post.Likepostid, post.Name)
-	// }
 
 	sort.Slice(combinedPosts, func(i, j int) bool {
 		return combinedPosts[i].CreatedAt.After(combinedPosts[j].CreatedAt)

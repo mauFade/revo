@@ -23,6 +23,10 @@ func (r *LikeRepository) Update(entity *postmodel.Like) {
 	r.db.Save(entity)
 }
 
+func (r *LikeRepository) Delete(likeId string) {
+	r.db.Delete(&postmodel.Like{}, "id = ?", likeId)
+}
+
 func (r *LikeRepository) FindByUserIDAndPostID(postId, userId string) *postmodel.Like {
 	var like *postmodel.Like
 

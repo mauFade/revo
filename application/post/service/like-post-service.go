@@ -30,11 +30,13 @@ func NewLikePostService(
 }
 
 func (s *LikePostService) Execute(data LikePostInput) error {
-	if s.ValidateLike(data.PostID, data.UserID) == true {
+	like := s.FindLike(data.PostID, data.UserID)
+
+	if like == nil {
 		post := s.pr.FindByID(data.PostID)
 
 		if post == nil {
-			return errors.New("Post not foun with this id")
+			return errors.New("Post not found with this id")
 		}
 
 		post.Likes += 1
@@ -49,19 +51,29 @@ func (s *LikePostService) Execute(data LikePostInput) error {
 		)
 
 		s.lr.Insert(like)
+	} else {
+		post := s.pr.FindByID(data.PostID)
 
-		return nil
+		if post == nil {
+			return errors.New("Post not found with this id")
+		}
+
+		if post.Likes > 0 {
+			post.Likes -= 1
+		} else {
+			post.Likes = 0
+		}
+
+		s.pr.Update(post)
+
+		s.lr.Delete(like.ID)
 	}
 
 	return nil
 }
 
-func (s *LikePostService) ValidateLike(postId, userId string) bool {
+func (s *LikePostService) FindLike(postId, userId string) *postmodel.Like {
 	like := s.lr.FindByUserIDAndPostID(postId, userId)
 
-	if like == nil {
-		return true
-	}
-
-	return false
+	return like
 }
