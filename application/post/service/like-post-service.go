@@ -32,13 +32,13 @@ func NewLikePostService(
 func (s *LikePostService) Execute(data LikePostInput) error {
 	like := s.FindLike(data.PostID, data.UserID)
 
+	post := s.pr.FindByID(data.PostID)
+
+	if post == nil {
+		return errors.New("Post not found with this id")
+	}
+
 	if like == nil {
-		post := s.pr.FindByID(data.PostID)
-
-		if post == nil {
-			return errors.New("Post not found with this id")
-		}
-
 		post.Likes += 1
 
 		s.pr.Update(post)
@@ -52,12 +52,6 @@ func (s *LikePostService) Execute(data LikePostInput) error {
 
 		s.lr.Insert(like)
 	} else {
-		post := s.pr.FindByID(data.PostID)
-
-		if post == nil {
-			return errors.New("Post not found with this id")
-		}
-
 		if post.Likes > 0 {
 			post.Likes -= 1
 		} else {
